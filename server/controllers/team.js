@@ -72,7 +72,8 @@ module.exports = class TeamRouter {
         ctx.body = responseWrapper(true, "团队创建成功", team)
     }
 
-    @request('delete', '/api/team/dissolve/{id}')
+    // @request('delete', '/api/team/dissolve/{id}')
+    @request('get', '/api/deleteTeam/dissolve/{id}')
     @summary('解散一个团队')
     @tag
     @path({
@@ -209,8 +210,8 @@ module.exports = class TeamRouter {
         var teamList = []
         for (var u of userList) {
             if (!(_.find(team.members, function(o) {
-                    return o.email == u.email
-                }))) {
+                return o.email == u.email
+            }))) {
                 teamList.push({
                     _id: u.id,
                     username: u.username,
@@ -266,7 +267,8 @@ module.exports = class TeamRouter {
         ctx.body = responseWrapper(true, "已发送邀请")
     }
 
-    @request('delete', '/api/team/{id}/member/{userId}')
+    // @request('delete', '/api/team/{id}/member/{userId}')
+    @request('get', '/api/deleteTeam/{id}/member/{userId}')
     @summary('移除某个成员,或者自己离开团队')
     @tag
     @path({

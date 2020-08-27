@@ -23,7 +23,7 @@ export function getAppDetail(teamId, id) {
 
 // 删除应用
 export function delectApp(teamId, id) {
-  let url = `api/miniapps/${teamId}/${id}`
+  let url = `api/deleteMiniapps/${teamId}/${id}`
   return deleteHttp(url)
 }
 

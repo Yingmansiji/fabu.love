@@ -1,12 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import User from '../components/auth/auth.vue'
-// import AppDetail from '../components/appDetail/appDetail.vue'
-// import AppPreView from '../components/appDetail/appPreView.vue'
-// import UserInfo from '../components/user/userInfo.vue'
-// import Main from '../components/main/main.vue'
-// import Apps from '../components/appList/appList.vue'
-// import TeamMgr from '../components/team/teamMgr.vue'
 
 Vue.use(Router)
 
@@ -62,4 +55,3 @@ export default new Router({
     }
   ]
 })
-

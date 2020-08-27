@@ -4,7 +4,7 @@ import config from '../config';
 
 var dbUrl = `mongodb://${config.dbHost}:${config.dbPort}/${config.dbName}`;
 if (config.dbUser) {
-    dbUrl = `mongodb://${config.dbUser}:${config.dbPass}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+    dbUrl = `mongodb://${config.dbUser}:${config.dbPass}@${config.dbHost}:${config.dbPort}/${config.dbName}?authSource=admin`;
 }
 
 console.log(dbUrl)
@@ -23,4 +23,4 @@ mongoose
     })
 Fawn.init(mongoose);
 
-module.exports = mongoose
+module.exports = mongoose;

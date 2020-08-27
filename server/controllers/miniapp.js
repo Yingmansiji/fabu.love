@@ -91,7 +91,7 @@ module.exports = class MiniAppRouter {
 
         var app = new Miniapp(content)
         await app.save()
-            // .limit(size).skip(page * size)
+        // .limit(size).skip(page * size)
         ctx.body = responseWrapper(app)
     }
 
@@ -111,7 +111,8 @@ module.exports = class MiniAppRouter {
         ctx.body = responseWrapper(app)
     }
 
-    @request('delete', '/api/miniapps/{teamId}/{id}')
+    // @request('delete', '/api/miniapps/{teamId}/{id}')
+    @request('get', '/api/deleteMiniapps/{teamId}/{id}')
     @summary("删除某个小程序应用")
     @tag
     @path({
@@ -143,11 +144,11 @@ module.exports = class MiniAppRouter {
 
     @request('get', '/api/miniapps/{teamId}')
     @summary("获取团队下小程序列表")
-        // @query(
-        //     {
-        //     page:{type:'number',default:0,description:'分页页码(可选)'},
-        //     size:{type:'number',default:10,description:'每页条数(可选)'}
-        // })
+    // @query(
+    //     {
+    //     page:{type:'number',default:0,description:'分页页码(可选)'},
+    //     size:{type:'number',default:10,description:'每页条数(可选)'}
+    // })
     @path({ teamId: { type: 'string', description: '团队id' } })
     @tag
     static async getApps(ctx, next) {
@@ -157,17 +158,17 @@ module.exports = class MiniAppRouter {
         var { teamId } = ctx.validatedParams;
 
         var result = await Miniapp.find({ 'ownerId': teamId || user.id })
-            // .limit(size).skip(page * size)
+        // .limit(size).skip(page * size)
         ctx.body = responseWrapper(result)
     }
 
     @request('post', '/api/miniapps/adddownloadcode')
     @summary("根据授权码或租户id添加一个下载二维码")
-        // @query(
-        //     {
-        //     page:{type:'number',default:0,description:'分页页码(可选)'},
-        //     size:{type:'number',default:10,description:'每页条数(可选)'}
-        // })
+    // @query(
+    //     {
+    //     page:{type:'number',default:0,description:'分页页码(可选)'},
+    //     size:{type:'number',default:10,description:'每页条数(可选)'}
+    // })
     @body({
         appId: { type: 'string', require: true ,description: "小程序的appid" },
         scene: { type: 'string', require: false ,description: "场景参数列如authcode=xxxx&match=xxxx" },
@@ -184,7 +185,7 @@ module.exports = class MiniAppRouter {
 
         var app = await Miniapp.findOne({ appId: body.appId })
         appInTeamAndUserIsManager(app._id,body.teamId,user._id)
-        
+
         var result = await axios.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${app.appId}&secret=${app.appSecret}`)
 
         var token = result.data.access_token
@@ -228,11 +229,11 @@ module.exports = class MiniAppRouter {
 
     @request('post', '/api/miniapps/removedownloadcode')
     @summary("删除一个下载二维码")
-        // @query(
-        //     {
-        //     page:{type:'number',default:0,description:'分页页码(可选)'},
-        //     size:{type:'number',default:10,description:'每页条数(可选)'}
-        // })
+    // @query(
+    //     {
+    //     page:{type:'number',default:0,description:'分页页码(可选)'},
+    //     size:{type:'number',default:10,description:'每页条数(可选)'}
+    // })
     @body({
         appId: { type: 'string', require: true ,description: "小程序的appid" },
         codeId: { type: 'string', require: true ,description: "入口页面" },
@@ -273,8 +274,8 @@ module.exports = class MiniAppRouter {
     //     ctx.body = responseWrapper(true, "应用设置已更新")
     // }
 
-  
-  
+
+
     @request('get', '/api/count/{appid}/{versionId}')
     @summary("增加一次下载次数")
     @tag
@@ -327,17 +328,17 @@ async function requestImage(url,data,codePath,imageName){
     const path = fpath.resolve(codePath, imageName)
     const writer = fs.createWriteStream(path)
     const response = await axios({
-      url,
-      method: 'POST',
-      responseType: 'stream',
-      data: data
+        url,
+        method: 'POST',
+        responseType: 'stream',
+        data: data
     })
-    
+
     response.data.pipe(writer)
-  
+
     return new Promise((resolve, reject) => {
-      writer.on('finish', resolve)
-      writer.on('error', reject)
+        writer.on('finish', resolve)
+        writer.on('error', reject)
     })
 }
 

@@ -74,7 +74,7 @@ export default class XMPublish {
       url: (miapiURL+'/dev/query'),
       form: formParams
     }
-  
+
     return new Promise ((resolve, reject) => {
       request(param, (error, response, body) => {
         if (error) {
@@ -89,13 +89,13 @@ export default class XMPublish {
   }
 
   /**
-   * 
+   *
    * @param {String} email 开发者email
    * @param {String} password 访问密码
    * @param {Number} synchroType 0：新增;1：更新;2：信息修改
    * @param {String} apkFile apk 路径
    * @param {String} iconFile icon 路径
-   * @param appInfo 应该信息 
+   * @param appInfo 应该信息
    *                {"appName": "mi发布",   // 应用名称  必选
                      "packageName": "com.evozi.injector"，// 包名      必选
                      "publisherName": "",  // 开发者名称  可选 默认使用开发者站注册的名称
@@ -182,7 +182,7 @@ export default class XMPublish {
   }
 
   /**
-   * 
+   *
    * @param {String} value 需要MD5的字符串
    */
   static md5(value) {
@@ -190,7 +190,7 @@ export default class XMPublish {
   }
 
   /**
-   * 
+   *
    * @param {String} file 需要md5的文件
    */
   static md5file(file) {
@@ -203,7 +203,7 @@ export default class XMPublish {
   }
 
   /**
-   * 
+   *
    * @param {String} cerFile 公钥路径
    */
   static getPublicKey() {
@@ -212,7 +212,7 @@ export default class XMPublish {
   }
 
   /**
-   * 
+   *
    * @param str 需要别加密的字符串
    * @param publicKey 公钥
    */

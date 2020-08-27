@@ -19,7 +19,7 @@
           <label class="teamMgr-teamId">ID: {{teamId}}</label>
         </div>
       </div>
-      
+
     </div>
     <div class="teamMgr-collection">
       <div class="teamMgr-content">

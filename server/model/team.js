@@ -32,7 +32,7 @@ var teamSchema = new Schema({
 
 
 function autoAddCreator(params) {
-    
+
 }
 
 module.exports = mongoose.model('Team', teamSchema);

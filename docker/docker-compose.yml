@@ -17,12 +17,12 @@ services:
       dockerfile: docker/Dockerfile
     environment:
       FABU_DB_HOST: mongo
-      # FABU_BASE_URL: https://fabu.apppills.com 正式环境部署请打开注释，并修改为域名为自己的域名
+      # FABU_BASE_URL:  正式环境部署请打开注释，并修改为域名为自己的域名
       FABU_UPLOAD_DIR: /fabu/upload
     ports: 
       - "9898:9898"
     volumes:
-      - ./upload:/fabu/upload
+      - /data/upload:/fabu/upload
     depends_on:
       - mongo
     networks:
@@ -32,6 +32,3 @@ networks:
   appnet:
     driver:
       bridge
-
-
-  

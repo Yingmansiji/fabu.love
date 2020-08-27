@@ -16,7 +16,6 @@ const Version = require('../model/version')
 const App = require('../model/app_model')
 var multer = require('koa-multer');
 var fs = require('fs')
-var crypto = require('crypto')
 var path = require('path')
 var os = require('os')
 var mime = require('mime')
@@ -117,29 +116,14 @@ async function parseAppAndInsertToDB(file, user, team) {
     //解析ipa和apk文件
     var info = await parser(filePath);
     var fileName = info.bundleId + "_" + info.versionStr + "_" + info.versionCode
-        //解析icon图标
+    //解析icon图标
     var icon = await extractor(filePath, fileName, team);
-
 
     //移动文件到对应目录
     var fileRelatePath = path.join(team.id, info.platform)
     createFolderIfNeeded(path.join(uploadDir, fileRelatePath))
     var fileRealPath = path.join(uploadDir, fileRelatePath, fileName + path.extname(filePath))
-
-    //获取文件MD5值
-    var buffer = fs.readFileSync(filePath)
-    var fsHash = crypto.createHash('md5')
-    fsHash.update(buffer)
-    var filemd5 = fsHash.digest('hex')
-
-    //异步保存问题（避免跨磁盘移动问题）
-    var readStream = fs.createReadStream(filePath)
-    var writeStream = fs.createWriteStream(fileRealPath)
-    readStream.pipe(writeStream)
-    readStream.on('end',function(){
-        fs.unlinkSync(filePath)
-    })
-
+    await fs.renameSync(filePath, fileRealPath)
     info.downloadUrl = path.join(uploadPrefix, fileRelatePath, fileName + path.extname(filePath))
 
     var app = await App.findOne({ 'platform': info['platform'], 'bundleId': info['bundleId'], 'ownerId': team._id })
@@ -156,7 +140,6 @@ async function parseAppAndInsertToDB(file, user, team) {
         info.uploaderId = user._id;
         info.size = fs.statSync(fileRealPath).size
         var version = Version(info)
-        version.md5 = filemd5
         version.appId = app._id;
         if (app.platform == 'ios') {
             version.installUrl = mapInstallUrl(app.id, version.id)
@@ -173,7 +156,6 @@ async function parseAppAndInsertToDB(file, user, team) {
         info.size = fs.statSync(fileRealPath).size
         var version = Version(info)
         version.appId = app._id;
-        version.md5 = filemd5
         if (app.platform == 'ios') {
             version.installUrl = mapInstallUrl(app.id, version.id)
         } else {
@@ -236,7 +218,7 @@ function parseIpa(filename) {
             }
             resolve(info)
         })
-        
+
     })
 }
 
@@ -259,7 +241,7 @@ async function extractIpaIcon(filename, guid, team) {
             }
         })
     }).catch({
-        
+
     })
 
     if (!found) {
@@ -267,7 +249,7 @@ async function extractIpaIcon(filename, guid, team) {
     }
 
     var pnfdefryDir = path.join(__dirname, '..', 'library/pngdefry')
-        //写入成功判断icon是否是被苹果破坏过的图片
+    //写入成功判断icon是否是被苹果破坏过的图片
     var exeName = '';
     if (os.type() === 'Darwin') {
         exeName = 'pngfy-osx';
@@ -305,7 +287,7 @@ function parseApk(filename)  {
         parser.parse().then(result => {
             // console.log('app info ----> ', result)
             // console.log('icon base64 ----> ', result.icon)
-            // console.log('====================================', JSON.stringify(result));
+            console.log('====================================', JSON.stringify(result));
             var label = undefined
 
             if(result.application && result.application.label && result.application.label.length > 0) {
@@ -316,7 +298,7 @@ function parseApk(filename)  {
                 label = label.replace(/'/g, '')
             }
             var appName = (result['application-label'] || result['application-label-zh-CN'] || result['application-label-es-US'] ||
-            result['application-label-zh_CN'] || result['application-label-es_US'] || label || 'unknown')
+                result['application-label-zh_CN'] || result['application-label-es_US'] || label || 'unknown')
 
             var info = {
                 'appName': appName.replace(/'/g, ''),
@@ -326,9 +308,9 @@ function parseApk(filename)  {
                 'platform': 'android'
             }
             resolve(info)
-          }).catch(err => {
+        }).catch(err => {
             console.log('err ----> ', err)
-          })
+        })
         // apkParser3(filename, (err, data) => {
         //     var apkPackage = parseText(data.package)
         //     console.log(data)
@@ -365,7 +347,8 @@ function parseApk(filename)  {
 function extractApkIcon(filepath, guid, team) {
     return new Promise((resolve, reject) => {
         apkParser3(filepath, (err, data) => {
-            var iconPath = false;
+            // var iconPath = false;
+            var iconPath = "";
             var iconSize = [640, 320, 240, 160]
             for (var i in iconSize) {
                 if (typeof data['application-icon-' + iconSize[i]] !== 'undefined') {
@@ -382,7 +365,7 @@ function extractApkIcon(filepath, guid, team) {
             var realPath = path.join(team.id, "icon", '/{0}_a.png'.format(guid))
             createFolderIfNeeded(dir)
             var tempOut = path.join(uploadDir, realPath)
-            
+
             var { ext, dir } = path.parse(iconPath);
             // 获取到最大的png的路径
             let maxSizePath;

@@ -66,19 +66,19 @@ module.exports = class AuthRouter {
     @tag
     @body(loginSchema)
     static async login(ctx, next) {
-        const { body } = ctx.request
-        console.log(body)
-            // 判断是否开放 ldap，如果开放ldap, 
-            // 根据ldap的用户信息生成新用户
+        const { body } = ctx.request;
+        console.log(body);
+        // 判断是否开放 ldap，如果开放ldap,
+        // 根据ldap的用户信息生成新用户
         if (config.openLdap) {
             // let auth = await Ldap.auth(body.username, body.password)
             var ldapUser = await Ldap.auth(body.username, body.password).catch((error) => {
                 console.log(error)
-            })
+            });
             let user = await User.findOne({ username: body.username });
             if (ldapUser && ((!user) || user.username !== ldapUser.name)) {
-                console.log('user' + ldapUser)
-                var password = await bcrypt.hash(body.password, 10)
+                console.log('user' + ldapUser);
+                var password = await bcrypt.hash(body.password, 10);
                 var newUser = new User({ username: ldapUser.name, password: password, email: ldapUser.mail });
                 var team = new Team();
                 team._id = newUser._id;
@@ -136,7 +136,6 @@ module.exports = class AuthRouter {
         let user = await User.find({ username: body.username });
         if (!user.length) {
             var newUser = new User(body);
-
             var team = new Team();
             team._id = newUser._id;
             team.name = "我的团队";
@@ -211,8 +210,8 @@ module.exports = class AuthRouter {
     })
     @tag
     static async changeUserInfo(ctx, next) {
-        var user = ctx.state.user.data
-        var body = ctx.request.body
+        var user = ctx.state.user.data;
+        var body = ctx.request.body;
         var userData = await User.findById(user._id, "username");
         if (!userData) {
             throw new Error("用户不存在");

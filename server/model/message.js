@@ -11,7 +11,7 @@ var messageSchema = new Schema({
         required:true  //消息内容
     },
     sender:String, //发送者的id
-    receiver:{ 
+    receiver:{
         type:String,  //接受者的id 必填
         required:true
     },

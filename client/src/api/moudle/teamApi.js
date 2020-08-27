@@ -15,7 +15,7 @@ export function inviteMembers(teamId, emails) {
 }
 
 export function deleteMembers(teamId, userId) {
-  let url = `api/team/${teamId}/member/${userId}`
+  let url = `api/deleteTeam/${teamId}/member/${userId}`
   return deleteHttp(url)
 }
 
@@ -28,7 +28,7 @@ export function updateTeamName(teamId, name) {
 }
 
 export function dissolveTeam(teamId) {
-  let url = `api/team/dissolve/${teamId}`
+  let url = `api/deleteTeam/dissolve/${teamId}`
   return deleteHttp(url)
 }
 

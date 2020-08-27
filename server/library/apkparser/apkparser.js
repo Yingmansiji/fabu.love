@@ -6,18 +6,18 @@ var extractRaw;
 var parseApk;
 var parseOutput;
 
-parseApk = function(filename, cb) {
+parseApk = function (filename, cb) {
   var exeName = null;
   if (os.type() === 'Darwin') {
-      exeName = 'aapt-osx';
+    exeName = 'aapt-osx';
   } else if (os.type() === 'Linux') {
-      exeName = 'aapt-linux';
+    exeName = 'aapt-linux';
   } else {
-      throw new Error('Unknown OS!');
+    throw new Error('Unknown OS!');
   }
-  return exec(path.join(__dirname ,exeName), ['dump', 'badging', filename], {
+  return exec(path.join(__dirname, exeName), ['dump', 'badging', filename], {
     maxBuffer: 1024 * 1024 * 1024
-  }, function(err, out) {
+  }, function (err, out) {
     if (err) {
       return cb(err);
     }
@@ -25,7 +25,7 @@ parseApk = function(filename, cb) {
   });
 };
 
-parseOutput = function(text, cb) {
+parseOutput = function (text, cb) {
   var depth, element, indent, input, line;
   var matches, name, parent, parts, rest, type, value, _i, _len;
   if (!text) {

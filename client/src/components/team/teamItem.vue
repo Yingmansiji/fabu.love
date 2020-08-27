@@ -10,9 +10,9 @@
       <img v-show="isRole" class="teamItem-owner-img" :style="iconStyle" src="../../assets/ic_moreqx.png"/>
     </div>
     <context-menu class="ctx-menu" @ctx-cancel="onCtxClose" @ctx-close="onCtxClose" ref="ctxMenu">
-        <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToManager">管理员</li>
-        <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToGuest">围观群众</li>
-        <li class="ctx-item menu-item" @click="selected">{{lastItem}}</li>
+      <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToManager">管理员</li>
+      <li class="ctx-item" v-if="(isManager || !isSelf)" @click="setRoleToGuest">围观群众</li>
+      <li class="ctx-item menu-item" @click="selected">{{lastItem}}</li>
     </context-menu>
   </div>
 </template>

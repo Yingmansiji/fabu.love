@@ -47,7 +47,7 @@ class Ldap {
                 me.client.bind(rows[0].dn, password, function(error) {
                     if (error) {
                         console.log(error)
-                            // throws('密码错误')
+                        // throws('密码错误')
                         rejected(error)
                     } else {
                         console.log('success')

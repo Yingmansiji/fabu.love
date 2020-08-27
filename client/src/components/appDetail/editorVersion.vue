@@ -50,183 +50,183 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import * as AppResourceApi from '../../api/moudle/appResourceApi'
-  import {getUserTeam} from '../../mgr/userMgr'
+import * as AppResourceApi from '../../api/moudle/appResourceApi'
+import {getUserTeam} from '../../mgr/userMgr'
 
-  export default {
-    props: {
-      versionInfo: {
-        type: Object
-      },
-      appInfo: {
-        type: Object
-      }
+export default {
+  props: {
+    versionInfo: {
+      type: Object
     },
-    data() {
-      return {
-        show: false,
-        updataContent: '',
-        showinDownLoadPage: false,
-        downloadUrl: '',
-        updateType: ''
+    appInfo: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      show: false,
+      updataContent: '',
+      showinDownLoadPage: false,
+      downloadUrl: '',
+      updateType: ''
+    }
+  },
+  created() {
+    setTimeout(() => {
+      console.log(this.versionInfo)
+      this.show = true
+      this.downloadUrl = this.versionInfo.installUrl
+      if (this.versionInfo.changelog) {
+        this.updataContent = this.versionInfo.changelog
       }
-    },
-    created() {
+      this.updateType = this.versionInfo.updateMode
+      this.showinDownLoadPage = this.versionInfo.showOnDownloadPage
+    }, 200)
+  },
+  methods: {
+    cancel() {
+      this.show = false
       setTimeout(() => {
-        console.log(this.versionInfo)
-        this.show = true
-        this.downloadUrl = this.versionInfo.installUrl
-        if (this.versionInfo.changelog) {
-          this.updataContent = this.versionInfo.changelog
-        }
-        this.updateType = this.versionInfo.updateMode
-        this.showinDownLoadPage = this.versionInfo.showOnDownloadPage
-      }, 200)
+        this.$emit('cancel')
+      }, 500)
     },
-    methods: {
-      cancel() {
-        this.show = false
-        setTimeout(() => {
-          this.$emit('cancel')
-        }, 500)
-      },
-      sure() {
-        let body = {
-          'installUrl': this.installUrl,
-          'showOnDownloadPage': this.showinDownLoadPage,
-          'changelog': this.updataContent,
-          'updateMode': this.updateType
-        }
-        AppResourceApi.updateNote(getUserTeam()._id, this.appInfo._id, this.versionInfo._id, body).then((res) => {
-          console.log(res)
-          this.$message.success(res.message)
-          this.$emit('updateSuccess')
-        }, reject => {
+    sure() {
+      let body = {
+        'installUrl': this.installUrl,
+        'showOnDownloadPage': this.showinDownLoadPage,
+        'changelog': this.updataContent,
+        'updateMode': this.updateType
+      }
+      AppResourceApi.updateNote(getUserTeam()._id, this.appInfo._id, this.versionInfo._id, body).then((res) => {
+        console.log(res)
+        this.$message.success(res.message)
+        this.$emit('updateSuccess')
+      }, reject => {
 
-        })
-      },
-      clickcontent() {
+      })
+    },
+    clickcontent() {
 
-      },
-      getDownLoadCount(count) {
-        if (count) {
-          return count
-        } else {
-          return 0
-        }
-      },
-      getAllowDownLoadCount(strategy) {
-        if (strategy && strategy.downloadCountLimit) {
-          return strategy.downloadCountLimit
-        } else {
-          return '不限'
-        }
+    },
+    getDownLoadCount(count) {
+      if (count) {
+        return count
+      } else {
+        return 0
+      }
+    },
+    getAllowDownLoadCount(strategy) {
+      if (strategy && strategy.downloadCountLimit) {
+        return strategy.downloadCountLimit
+      } else {
+        return '不限'
       }
     }
   }
+}
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+@import "../../common/scss/base";
 
-  .fadeRight-enter-active {
-    transition: all .5s ease;
-  }
-  .fadeRight-leave-active {
-    transition: all .5s ease;
-  }
-  .fadeRight-enter, .fadeRight-leave-to {
-    transform: translateX(100%);
-  }
-  .editorVersion-wrapper {
-    position: absolute;
-    top: 72px;
-    left: 0px;
-    bottom: 0px;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.5);
-    z-index: 100;
-  }
-  .editorVersion-content {
-    float: right;
-    width: 480px;
-    height: 100%;
-    margin-right: 0;
-    background-color: white;
-    box-shadow: 0 2px 6px rgba(120, 120, 120, 0.5);
-    overflow: scroll;
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
-  .editorVersion-content .top {
-    padding-left: 41px;
-    padding-top: 22px;
-    position: relative;
-  }
-  .editorVersion-content .top span {
-    color: $mainTitleColor;
-    font-size: 14px;
-    line-height: 24px;
-  }
-  .editorVersion-content .top p {
-    position: absolute;
-    top: 22px;
-    right: 24px;
-    font-size: 12px;
-    color: #354052;
-    line-height: 24px;
-  }
-  .editorVersion-content .top .el-switch {
-    position: absolute;
-    right: 104px;
-    top: 24px;
-  }
-  .editorVersion-content .el-form {
-    margin-top: 24px;
-    margin-left: 60px;
-  }
-  .editorVersion-content .el-form .el-form-item {
-    margin-bottom: 5px;
-  }
-  .editorVersion-content .el-form .el-form-item label {
-    font-size: 14px;
-    color: $subTitleColor;
-  }
-  .editorVersion-content .el-form .el-form-item .versioninput {
-    width: calc(100% - 40px);
-    font-size: 14px;
-    color: $mainTitleColor;
-  }
-  .editorVersion-content .el-form .el-form-item .versiondownload {
-    font-size: 14px;
-    color: $mainTitleColor;
-  }
-  .editorVersion-content .el-form .el-form-item .textareacount {
-    text-align: right;
-    padding-right: 40px;
-  }
-  .editorVersion-content .el-form .el-form-item .el-radio {
-    margin-right: -10px;
-  }
-  .editorVersion-content .editorVersion-updatatextarea {
-    width: calc(100% - 40px);
-    font-size: 14px;
-    color: $mainTitleColor;
-  }
-  .editorVersion-content .editorVersion-updatatextarea textarea {
-    height: 168px !important;
-    outline: 0;
-    padding-left: 5px;
-  }
-  .editorVersion-content .el-button {
-    margin-top: 48px;
-  }
-  .editorVersion-content .el-button span {
-    line-height: 36px !important;
-  }
-  .editorVersion-content .sureBtn {
-    background-color: $mainColor !important;
-    color: white !important;
-    margin-left: calc(100% - 40px - 96px - 96px - 10px);
-  }
+.fadeRight-enter-active {
+  transition: all .5s ease;
+}
+.fadeRight-leave-active {
+  transition: all .5s ease;
+}
+.fadeRight-enter, .fadeRight-leave-to {
+  transform: translateX(100%);
+}
+.editorVersion-wrapper {
+  position: absolute;
+  top: 72px;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 100;
+}
+.editorVersion-content {
+  float: right;
+  width: 480px;
+  height: 100%;
+  margin-right: 0;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(120, 120, 120, 0.5);
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.editorVersion-content .top {
+  padding-left: 41px;
+  padding-top: 22px;
+  position: relative;
+}
+.editorVersion-content .top span {
+  color: $mainTitleColor;
+  font-size: 14px;
+  line-height: 24px;
+}
+.editorVersion-content .top p {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  font-size: 12px;
+  color: #354052;
+  line-height: 24px;
+}
+.editorVersion-content .top .el-switch {
+  position: absolute;
+  right: 104px;
+  top: 24px;
+}
+.editorVersion-content .el-form {
+  margin-top: 24px;
+  margin-left: 60px;
+}
+.editorVersion-content .el-form .el-form-item {
+  margin-bottom: 5px;
+}
+.editorVersion-content .el-form .el-form-item label {
+  font-size: 14px;
+  color: $subTitleColor;
+}
+.editorVersion-content .el-form .el-form-item .versioninput {
+  width: calc(100% - 40px);
+  font-size: 14px;
+  color: $mainTitleColor;
+}
+.editorVersion-content .el-form .el-form-item .versiondownload {
+  font-size: 14px;
+  color: $mainTitleColor;
+}
+.editorVersion-content .el-form .el-form-item .textareacount {
+  text-align: right;
+  padding-right: 40px;
+}
+.editorVersion-content .el-form .el-form-item .el-radio {
+  margin-right: -10px;
+}
+.editorVersion-content .editorVersion-updatatextarea {
+  width: calc(100% - 40px);
+  font-size: 14px;
+  color: $mainTitleColor;
+}
+.editorVersion-content .editorVersion-updatatextarea textarea {
+  height: 168px !important;
+  outline: 0;
+  padding-left: 5px;
+}
+.editorVersion-content .el-button {
+  margin-top: 48px;
+}
+.editorVersion-content .el-button span {
+  line-height: 36px !important;
+}
+.editorVersion-content .sureBtn {
+  background-color: $mainColor !important;
+  color: white !important;
+  margin-left: calc(100% - 40px - 96px - 96px - 10px);
+}
 </style>

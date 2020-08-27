@@ -5,7 +5,7 @@ import config from '../config'
 
 module.exports = class Mail {
 
-    /** 
+    /**
      * @argument emails [Array || String] 支持输入多个邮箱组成的数组或者单个邮箱
      * @argument subject String 邮件主题
      * @argument content String<HTML> 邮件内容

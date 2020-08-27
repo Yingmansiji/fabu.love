@@ -25,115 +25,115 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import * as AppResourceApi from '../../api/moudle/appResourceApi'
-  import {getUserTeam} from '../../mgr/userMgr'
+import * as AppResourceApi from '../../api/moudle/appResourceApi'
+import {getUserTeam} from '../../mgr/userMgr'
 
-  export default {
-    props: {
-      appInfo: {
-        type: Object
+export default {
+  props: {
+    appInfo: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      installType: '公开',
+      pulishType: '手动发布',
+      installPwd: ''
+    }
+  },
+  created() {
+  },
+  mounted() {
+    this.installType = this.appInfo.installWithPwd === 1 ? '密码安装' : '公开'
+    this.pulishType = this.appInfo.autoPublish === true ? '自动发布' : '手动发布'
+    this.installPwd = this.appInfo.installPwd
+  },
+  methods: {
+    clickSure() {
+      if (this.installType === '密码安装' && this.installPwd === '') {
+        this.$message.error('密码不能为空')
+        return
       }
-    },
-    data() {
-      return {
-        installType: '公开',
-        pulishType: '手动发布',
-        installPwd: ''
+      let body = {
+        'shortUrl': this.appInfo.shortUrl,
+        'installWithPwd': this.installType === '公开' ? 0 : 1,
+        'installPwd': this.installPwd,
+        'autoPublish': this.pulishType === '手动发布' ? 0 : 1
       }
-    },
-    created() {
-    },
-    mounted() {
-      this.installType = this.appInfo.installWithPwd === 1 ? '密码安装' : '公开'
-      this.pulishType = this.appInfo.autoPublish === true ? '自动发布' : '手动发布'
-      this.installPwd = this.appInfo.installPwd
-    },
-    methods: {
-      clickSure() {
-        if (this.installType === '密码安装' && this.installPwd === '') {
-            this.$message.error('密码不能为空')
-            return
+      AppResourceApi.updateAppSetting(getUserTeam()._id, this.appInfo._id, body).then((res) => {
+        if (res.success) {
+          this.$message.success(res.message)
         }
-        let body = {
-          'shortUrl': this.appInfo.shortUrl,
-          'installWithPwd': this.installType === '公开' ? 0 : 1,
-          'installPwd': this.installPwd,
-          'autoPublish': this.pulishType === '手动发布' ? 0 : 1
-        }
-        AppResourceApi.updateAppSetting(getUserTeam()._id, this.appInfo._id, body).then((res) => {
-            if (res.success) {
-              this.$message.success(res.message)
-            }
-        }, reject => {
+      }, reject => {
 
-        })
-      }
+      })
     }
   }
+}
 </script>
 
 <style lang="scss">
-  @import "../../common/scss/base";
+@import "../../common/scss/base";
 
-  .appsetting-wrapper .top {
-    width: 100%;
-    height: 48px;
-    background-color: white;
-    margin-top: 12px;
-    line-height: 48px;
-    padding-left: 24px;
-    box-sizing: border-box;
-  }
-  .appsetting-wrapper .content {
-    width: 100%;
-    height: 276px;
-    background-color: white;
-    margin-top: 1px;
-    padding-top: 35px;
-  }
-  .appsetting-wrapper .content .el-form {
-    margin-left: 120px;
-  }
-  .appsetting-wrapper .content .el-form .el-form-item label {
-    font-size: 14px;
-    color: $subTitleColor;
-    margin-right: 20px;
-  }
-  .appsetting-wrapper .content .el-form .el-form-item .el-input__inner {
-    border-right-width: 0px;
-    border-left-width: 0px;
-    border-top-width: 0px;
-    border-radius: 0px;
-    font-size: 14px;
-    outline: 0;
-    padding: 0px;
-    padding-left: 5px;
-    height: 24px !important;
-    line-height: 24px;
-  }
-  .appsetting-wrapper .content .el-form .el-form-item .shorturl {
-    width: 150px;
-    display: inline-block;
-  }
-  .appsetting-wrapper .content .el-form .el-form-item .installtype {
-    width: 150px;
-  }
-  .content .bottomBtn{
-    width: 96px;
-    height: 36px;
-    border-radius: 18px;
-    line-height: 36px;
-    margin-top: 18px;
-    margin-left: calc(50% - 48px);
-  }
-  .appsetting-wrapper .content .el-form .el-form-item .el-radio span {
-    font-size: 14px !important;
-  }
-  .appsetting-wrapper .content .el-radio__input.is-checked .el-radio__inner {
-    background-color: $mainColor;
-    border-color: $mainColor;
-  }
-  .appsetting-wrapper .content .el-radio__input.is-checked + .el-radio__label {
-    color: $mainColor;
-  }
+.appsetting-wrapper .top {
+  width: 100%;
+  height: 48px;
+  background-color: white;
+  margin-top: 12px;
+  line-height: 48px;
+  padding-left: 24px;
+  box-sizing: border-box;
+}
+.appsetting-wrapper .content {
+  width: 100%;
+  height: 276px;
+  background-color: white;
+  margin-top: 1px;
+  padding-top: 35px;
+}
+.appsetting-wrapper .content .el-form {
+  margin-left: 120px;
+}
+.appsetting-wrapper .content .el-form .el-form-item label {
+  font-size: 14px;
+  color: $subTitleColor;
+  margin-right: 20px;
+}
+.appsetting-wrapper .content .el-form .el-form-item .el-input__inner {
+  border-right-width: 0px;
+  border-left-width: 0px;
+  border-top-width: 0px;
+  border-radius: 0px;
+  font-size: 14px;
+  outline: 0;
+  padding: 0px;
+  padding-left: 5px;
+  height: 24px !important;
+  line-height: 24px;
+}
+.appsetting-wrapper .content .el-form .el-form-item .shorturl {
+  width: 150px;
+  display: inline-block;
+}
+.appsetting-wrapper .content .el-form .el-form-item .installtype {
+  width: 150px;
+}
+.content .bottomBtn{
+  width: 96px;
+  height: 36px;
+  border-radius: 18px;
+  line-height: 36px;
+  margin-top: 18px;
+  margin-left: calc(50% - 48px);
+}
+.appsetting-wrapper .content .el-form .el-form-item .el-radio span {
+  font-size: 14px !important;
+}
+.appsetting-wrapper .content .el-radio__input.is-checked .el-radio__inner {
+  background-color: $mainColor;
+  border-color: $mainColor;
+}
+.appsetting-wrapper .content .el-radio__input.is-checked + .el-radio__label {
+  color: $mainColor;
+}
 </style>

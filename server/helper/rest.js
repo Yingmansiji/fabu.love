@@ -11,6 +11,7 @@ module.exports = {
 
             if (ctx.request.path.startsWith(pathPrefix)) {
                 console.log(`Process API ${ctx.request.method} ${ctx.request.url}...`)
+                //绑定rest方法
                 ctx.rest = (data) => {
                     ctx.response.type = 'application/json'
                     ctx.response.body = data
@@ -18,6 +19,7 @@ module.exports = {
                 try {
                     await next()
                 } catch (e) {
+                    //返回错误
                     console.log('Process API error...')
                     ctx.response.type = 'application/json'
                     ctx.response.body = {

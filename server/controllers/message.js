@@ -25,8 +25,8 @@ module.exports = class MessageRouter {
     var user = ctx.state.user.data;
 
     var result = await Message.find({ receiver: user._id })
-      .limit(size)
-      .skip(page * size);
+        .limit(size)
+        .skip(page * size);
     ctx.body = responseWrapper(result);
   }
 
@@ -46,12 +46,13 @@ module.exports = class MessageRouter {
   static async markMessageRead(ctx, next) {
     var user = ctx.state.user.data;
     var result = await Message.update({ receiver: user._id ,status:'unread'},{
-        status: "hasread"
+      status: "hasread"
     });
     ctx.body = responseWrapper(true,'所有消息已标记已读');
   }
 
-  @request("delete", "/api/messages")
+  // @request("delete", "/api/messages")
+  @request("get", "/api/deleteMessages")
   @summary("清空消息列表")
   @query({
     page: { type: "number", default: 0, description: "分页页码(可选)" },

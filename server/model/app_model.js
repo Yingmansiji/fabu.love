@@ -3,50 +3,21 @@ const Schema = mongoose.Schema
 const Version = require('./version');
 
 var appSchema = new Schema({
-    platform: {
-        type: String
-    },
-    bundleId: {
-        type: String,
-        index: true
-    },
-    bundleName: {
-        type: String
-    },
+    platform: {type: String},
+    bundleId: {type: String,index: true},
+    bundleName: {type: String},
     appName: String,
-    currentVersion: {
-        type: String
-    },
+    currentVersion: {type: String},
     creatorId: String,
     creator: String,
-    createAt: {
-        type: Date,
-        default: Date.now
-    },
-    icon: {
-        type: String
-    },
-    describe: {
-        type: String
-    },
-    updateAt: {
-        type: Date
-    },
-    shortUrl: {
-        type: String,
-        unique: true
-    },
-    autoPublish: { //是否自动发布
-        type: Boolean,
-        default: false
-    },
-    installWithPwd: {
-        Boolean,
-        default: false
-    },
-    installPwd: {
-        type: String
-    },
+    createAt: {type: Date,default: Date.now},
+    icon: {type: String},
+    describe: {type: String},
+    updateAt: {type: Date},
+    shortUrl: {type: String,unique: true},
+    autoPublish: {type: Boolean,default: false},//是否自动发布
+    installWithPwd: {Boolean,default: false},
+    installPwd: {type: String},
     appLevel: String,
     ownerId: String,
     changelog: String,
@@ -77,7 +48,7 @@ var appSchema = new Schema({
             enum: ['silent', 'normal', 'force']
         }
     }
-})
+});
 
 // appSchema.virtual('versions').get(function () {     return Version.find })
 
