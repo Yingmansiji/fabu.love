@@ -39,7 +39,7 @@ demo地址: https://fabu.apppills.com/
 1. 下载源码  `git clone https://github.com/HeadingMobile/fabu.love.git`
 2. 执行`cd docker`
 3. 执行`docker-compose up -d --build`
-4. 打开浏览器 http://0.0.0.0:9898
+4. 打开浏览器 http://xx.xx.xx.xx:9898  打开docker时取得虚拟ip
 
 
 #### 本地运行
